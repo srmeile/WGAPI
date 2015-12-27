@@ -4,22 +4,22 @@ Basic PHP Library for handling Wargaming's Public API.
 
 ###Compatible Games
 
-* World of Tanks [API_WOT]
-* World of Warplanes [API_WOWP]
-* World of Warships [API_WOWS]
-* World of Tanks Blitz [API_BLITZ]
-* Wargaming.NET [API_WGN]
+* World of Tanks `[API_WOT]`
+* World of Warplanes `[API_WOWP]`
+* World of Warships `[API_WOWS]`
+* World of Tanks Blitz `[API_BLITZ]`
+* Wargaming.NET `[API_WGN]`
 
 ###Compatible Servers
 
-* North America [NA]
-* Europe [EU]
-* Russia [RU]
-* Asia [ASIA]
+* North America `[NA]`
+* Europe `[EU]`
+* Russia `[RU]`
+* Asia `[ASIA]`
 
 ##Sample usage
 
-```
+``` php
 <?php
 
 
@@ -38,6 +38,7 @@ print_r($accounts);
 
 ###Current progress
 
+```
 ->WoT Functions
         ->Account
                 ->Player List
@@ -58,3 +59,5 @@ print_r($accounts);
         ->Account
                 ->Player List
                 ->Player Personal data
+                
+```
