@@ -47,6 +47,7 @@ print_r($accounts);
                 ->Player List
                 ->Player Personal data
                 ->Player's vehicles
+                ->Player's achievements
 ->WOWP Functions
         ->Account
                 ->Player List
@@ -56,10 +57,12 @@ print_r($accounts);
         ->Account
                 ->Player List
                 ->Player Personal data
+                ->Player's achievements
 ->BLITZ Functions
         ->Account 
                 ->Player List
                 ->Player Personal data
+                ->Player's achievements
 ->WGN Functions
         ->Account
                 ->Player List

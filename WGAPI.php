@@ -172,6 +172,23 @@ class WGAPI{
     }
 
     /**
+     * Get Player(s) Achievements
+     * @param mixed $account_id - A single player or list players
+     * @param array|null $fields - List of response fields to use
+     * @return string - Returns a Json response from the API
+     */
+    public function account_achievements($account_id, array $fields = null){
+        $request_data = array('account_id' => $account_id);
+
+        if(count($fields) > 0)
+            $request_data['fields'] = $fields;
+
+        return $this->getRequest(sprintf($this->api_format,$this->apiMethod[1],$this->tld,$this->apiMethod[0],'account','achievements'),$request_data);
+    }
+
+
+
+    /**
      * Function that handles web requests
      * @param string $url - Api request url
      * @param array $data - Data to send to the api
