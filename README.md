@@ -1,6 +1,9 @@
 # WGAPI
 Basic PHP Library for handling Wargaming's Public API.
 
+##Requirements
+* PHP7 or greater
+* cURL
 
 ###Compatible Games
 
@@ -27,10 +30,10 @@ require '../WGAPI.php';
 
 
 $wgapi = new WGAPI('demo','na');
-
+$wgapi->setAPI(API_WOT);
 
 //basic example
-$accounts = json_decode($wgapi->account_list(API_WOT,'jayz536',2),true);
+$accounts = json_decode($wgapi->account_list('jayz536',2),true);
 
 print_r($accounts);
 ```
@@ -43,10 +46,12 @@ print_r($accounts);
         ->Account
                 ->Player List
                 ->Player Personal data
+                ->Player's vehicles
 ->WOWP Functions
         ->Account
                 ->Player List
                 ->Player Personal data
+                ->Player's vehicles
 ->WOWS Functions
         ->Account
                 ->Player List

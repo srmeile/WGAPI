@@ -1,8 +1,8 @@
 <?php
-define('API_WOT',['wot','worldoftanks']);
-define('API_BLITZ',['wotb','wotblitz']);
-define('API_WOWP',['wowp','worldofwarplanes']);
-define('API_WOWS',['wows','worldofwarships']);
+define('API_WOT',['wot','worldoftanks','tanks']);
+define('API_BLITZ',['wotb','wotblitz','tanks']);
+define('API_WOWP',['wowp','worldofwarplanes','planes']);
+define('API_WOWS',['wows','worldofwarships','ships']);
 define('API_WGN',['wgn','worldoftanks']);
 define('API_SERVERS',['na', 'eu', 'ru', 'asia']);
 
@@ -19,6 +19,7 @@ class WGAPI{
     //Required
     private $application_id     = NULL;
     private $server             = NULL;
+    private $apiMethod          = NULL;
 
     //Optional
     private $language       = 'en';
@@ -74,7 +75,7 @@ class WGAPI{
     }
 
     /**
-     * Set the method for using the API
+     * Set the method for querying the API
      * @param string $method - Method to use [ Valid Methods POST, GET]
      */
     public function setMethod(string $method){
@@ -98,18 +99,24 @@ class WGAPI{
     }
 
     /**
-     * account/list method
      * @param array $api - API to use [VALID Constants:  API_WOT, API_BLITZ, API_WOWP, API_WOWS, API_WGN]
+     */
+    public function setAPI(array $api){
+        if(count($api) < 2 )
+            throw new InvalidArgumentException('Game API is invalid, please check valid constants to use');
+
+        $this->apiMethod = $api;
+    }
+
+    /**
+     * account/list method
      * @param string $search - Player name to search
      * @param int $limit - Number of results to return [Max is 100]
      * @param array $fields - List of response fields to use
      * @param string $type - Search type [VALID: startswith, exact]
      * @return string  - Returns a Json response from the API
      */
-    public function account_list(array $api, string $search, int $limit = null, array $fields = null,string $type = null): string{
-        if(count($api) < 2 )
-            throw new InvalidArgumentException('Game API is invalid, please check valid constants to use');
-
+    public function account_list(string $search, int $limit = null, array $fields = null,string $type = null): string{
         $request_data = array('search' => $search);
         if($limit <100)
             $request_data['limit'] = $limit;
@@ -121,15 +128,19 @@ class WGAPI{
             $request_data['type'] = $type;
         }
 
-
-        return $this->getRequest(sprintf($this->api_format,$api[1],$this->tld,$api[0],'account','list'),$request_data);
+        return $this->getRequest(sprintf($this->api_format,$this->apiMethod[1],$this->tld,$this->apiMethod[0],'account','list'),$request_data);
     }
 
-    public function account_info(array $api, $account_id, array $fields = null, array $extra = null): string{
+    /**
+     * Get Player(s) Personal data
+     * @param $account_id - A single player or list players
+     * @param array|null $fields - List of response fields to use
+     * @param array|null $extra - Extra fields to query
+     * @return string - Returns a Json response from the API
+     */
+    public function account_info($account_id, array $fields = null, array $extra = null): string{
         $request_data = array('account_id' => $account_id);
 
-        if(count($api) < 2 )
-            throw new InvalidArgumentException('Game API is invalid, please check valid constants to use');
         if(count($fields) > 0)
             $request_data['fields'] = $fields;
         if(count($extra) > 0)
@@ -137,7 +148,27 @@ class WGAPI{
         if($this->access_token !=null)
             $request_data['access_token'] = $this->access_token;
 
-        return $this->getRequest(sprintf($this->api_format,$api[1],$this->tld,$api[0],'account','info'),$request_data);
+        return $this->getRequest(sprintf($this->api_format,$this->apiMethod[1],$this->tld,$this->apiMethod[0],'account','info'),$request_data);
+    }
+
+    /**
+     * Get Player(s) Vehicles [Not Detailed Stats! Only works for API_WOT and API_WOWP ]
+     * @param mixed $account_id - A single player or list players
+     * @param mixed $tank_id - A single tank id or list of tank ids
+     * @param array|null $fields - List of response fields to use
+     * @return string - Returns a Json response from the API
+     */
+    public function account_vehicles($account_id, $tank_id = null, array $fields = null){
+        $request_data = array('account_id' => $account_id);
+
+        if(count($fields) > 0)
+            $request_data['fields'] = $fields;
+        if($tank_id !=null)
+            $request_data['tank_id'] = $tank_id;
+        if($this->access_token !=null)
+            $request_data['access_token'] = $this->access_token;
+
+        return $this->getRequest(sprintf($this->api_format,$this->apiMethod[1],$this->tld,$this->apiMethod[0],'account',$this->apiMethod[2]),$request_data);
     }
 
     /**
