@@ -1,0 +1,2 @@
+# WGAPI
+Wargaming API Class
