@@ -107,15 +107,15 @@ class WGAPI{
      * @return string  - Returns a Json response from the API
      */
     public function account_list(array $api, string $search, int $limit = null, array $fields = null,string $type = null): string{
+        if(count($api) < 2 )
+            throw new InvalidArgumentException('Game API is invalid, please check valid constants to use');
+
         $request_data = array('search' => $search);
         if($limit <100)
             $request_data['limit'] = $limit;
 
         if(count($fields) > 0 )
             $request_data['fields'] = $fields;
-
-        if(count($api) < 2 )
-            throw new InvalidArgumentException('Game API is invalid, please check valid constants to use');
 
         if($type == 'exact'){
             $request_data['type'] = $type;
@@ -125,7 +125,20 @@ class WGAPI{
         return $this->getRequest(sprintf($this->api_format,$api[1],$this->tld,$api[0],'account','list'),$request_data);
     }
 
+    public function account_info(array $api, $account_id, array $fields = null, array $extra = null): string{
+        $request_data = array('account_id' => $account_id);
 
+        if(count($api) < 2 )
+            throw new InvalidArgumentException('Game API is invalid, please check valid constants to use');
+        if(count($fields) > 0)
+            $request_data['fields'] = $fields;
+        if(count($extra) > 0)
+            $request_data['extra'] = $extra;
+        if($this->access_token !=null)
+            $request_data['access_token'] = $this->access_token;
+
+        return $this->getRequest(sprintf($this->api_format,$api[1],$this->tld,$api[0],'account','info'),$request_data);
+    }
 
     /**
      * Function that handles web requests
@@ -140,9 +153,10 @@ class WGAPI{
         $data['application_id'] = $this->application_id;
         $data['language'] = $this->language;
 
-        if(isset($data['fields'])){
+        if(isset($data['fields']))
             $data['fields'] = implode(',', $data['fields']);    //Converts array of fields into one line string
-        }
+        if(isset($data['extra']))
+            $data['extra'] = implode(',', $data['extra']);
 
         $curl = curl_init();
 
