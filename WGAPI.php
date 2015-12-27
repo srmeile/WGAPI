@@ -103,10 +103,10 @@ class WGAPI{
      * @param string $search - Player name to search
      * @param int $limit - Number of results to return [Max is 100]
      * @param array $fields - List of response fields to use
+     * @param string $type - Search type [VALID: startswith, exact]
      * @return string  - Returns a Json response from the API
-     * @throws Exception - unidentified constant used
      */
-    public function account_list(array $api, string $search, int $limit = 100, array $fields = array()): string{
+    public function account_list(array $api, string $search, int $limit = null, array $fields = null,string $type = null): string{
         $request_data = array('search' => $search);
         if($limit <100)
             $request_data['limit'] = $limit;
@@ -117,8 +117,15 @@ class WGAPI{
         if(count($api) < 2 )
             throw new InvalidArgumentException('Game API is invalid, please check valid constants to use');
 
+        if($type == 'exact'){
+            $request_data['type'] = $type;
+        }
+
+
         return $this->getRequest(sprintf($this->api_format,$api[1],$this->tld,$api[0],'account','list'),$request_data);
     }
+
+
 
     /**
      * Function that handles web requests
