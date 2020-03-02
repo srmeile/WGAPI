@@ -10,8 +10,8 @@ Basic PHP Library for handling Wargaming's Public API.
 * World of Tanks `[API_WOT]`
 * World of Warplanes `[API_WOWP]`
 * World of Warships `[API_WOWS]`
-* World of Tanks Blitz `[API_BLITZ]`
-* Wargaming.NET `[API_WGN]`
+* World of Tanks Blitz `[API_BLITZ]` Deprecated
+* Wargaming.NET `[API_WGN]` 
 
 ###Compatible Servers
 
